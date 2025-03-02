@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zenélési Idő</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1DB954;
+            color: white;
+            text-align: center;
+            padding-top: 50px;
+        }
+        #leaderboard {
+            list-style-type: none;
+            padding: 0;
+        }
+        #leaderboard li {
+            background-color: #191414;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Zenélési Idő</h1>
+    <p id="time">Zenélési idő: 0 perc</p>
+    <h2>Ranglista</h2>
+    <ul id="leaderboard"></ul>
+    <script>
+        fetch('/get_playback_time')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('time').innerText = `Zenélési idő: ${data.time} perc`;
+            });
+
+        fetch('/get_leaderboard')
+            .then(response => response.json())
+            .then(data => {
+                const leaderboard = document.getElementById('leaderboard');
+                data.forEach(user => {
+                    const li = document.createElement('li');
+                    li.innerText = `${user.name}: ${user.time} perc`;
+                    leaderboard.appendChild(li);
+                });
+            });
+    </script>
+</body>
+</html>
